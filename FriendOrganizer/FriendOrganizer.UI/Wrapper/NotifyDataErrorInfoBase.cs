@@ -40,7 +40,7 @@ namespace FriendOrganizer.UI.Wrapper
 
         protected void ClearErrors(string propertyName)
         {
-            if (!_errorsByPropertyName.ContainsKey(propertyName))
+            if (_errorsByPropertyName.ContainsKey(propertyName))
             {
                 _errorsByPropertyName.Remove(propertyName);
                 OnErrorsChanged(propertyName);
