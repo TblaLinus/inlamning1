@@ -7,9 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ListView Grid.Column="0" 
-            ItemsSource="{Binding Friends}"
-            SelectedItem="{Binding SelectedFriend, Mode=TwoWay}"
-            DisplayMemberPath="DisplayMember"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <ItemsControl Grid.Column="0" 
+            ItemsSource="{Binding Friends}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding DisplayMember}"
+                                Command="{Binding OpenFriendDetailViewCommand}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>
