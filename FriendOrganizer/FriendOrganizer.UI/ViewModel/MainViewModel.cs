@@ -12,16 +12,19 @@ namespace FriendOrganizer.UI.ViewModel
     {
         private IEventAggregator _eventAggregator;
         private Func<IFriendDetailViewModel> _friendDetailViewModelCreator;
+        private Func<IMeetingDetailViewModel> _meetingDetailViewModelCreator;
         private IDetailViewModel _detailViewModel;
         private IMessageDialogService _messageDialogService;
         
         public MainViewModel(INavigationViewModel navigationViewModel, 
             Func<IFriendDetailViewModel> friendDetailViewModelCreator,
+            Func<IMeetingDetailViewModel> meetingDetailViewModelCreator,
             IEventAggregator eventAggregator,
             IMessageDialogService messageDialogService)
         {
             _eventAggregator = eventAggregator;
             _friendDetailViewModelCreator = friendDetailViewModelCreator;
+            _meetingDetailViewModelCreator = meetingDetailViewModelCreator;
             _messageDialogService = messageDialogService;
 
             _eventAggregator.GetEvent<OpenDetailViewEvent>().Subscribe(OnOpenDetailView);
@@ -67,6 +70,11 @@ namespace FriendOrganizer.UI.ViewModel
                 case nameof(FriendDetailViewModel):
                     DetailViewModel = _friendDetailViewModelCreator();
                     break;
+                case nameof(MeetingDetailViewModel):
+                    DetailViewModel = _meetingDetailViewModelCreator();
+                    break;
+                default:
+                    throw new Exception($"ViewModel {args.ViewModelName} not mapped");
             }
 
             await DetailViewModel.LoadAsync(args.Id);
