@@ -1,9 +1,6 @@
 ﻿using FriendOrganizer.DataAccess;
 using FriendOrganizer.Model;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FriendOrganizer.UI.Data.Repositories
@@ -37,6 +34,11 @@ namespace FriendOrganizer.UI.Data.Repositories
         public void Remove(Friend model)
         {
             _context.Friends.Remove(model);
+        }
+
+        public void RemovePhoneNumber(FriendPhoneNumber model)
+        {
+            _context.FriendPhoneNumbers.Remove(model);
         }
 
         public async Task SaveAsync()
