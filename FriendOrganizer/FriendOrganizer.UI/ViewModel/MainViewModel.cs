@@ -12,8 +12,8 @@ namespace FriendOrganizer.UI.ViewModel
     {
         private IEventAggregator _eventAggregator;
         private Func<IFriendDetailViewModel> _friendDetailViewModelCreator;
+        private IDetailViewModel _detailViewModel;
         private IMessageDialogService _messageDialogService;
-        private IFriendDetailViewModel _friendDetailViewModel;
         
         public MainViewModel(INavigationViewModel navigationViewModel, 
             Func<IFriendDetailViewModel> friendDetailViewModelCreator,
@@ -41,19 +41,19 @@ namespace FriendOrganizer.UI.ViewModel
 
         public INavigationViewModel NavigationViewModel { get; }
 
-        public IFriendDetailViewModel FriendDetailViewModel
+        public IDetailViewModel DetailViewModel
         {
-            get { return _friendDetailViewModel; }
+            get { return _detailViewModel; }
             private set
             {
-                _friendDetailViewModel = value;
+                _detailViewModel = value;
                 OnPropertyChanged();
             }
         }
 
         private async void OnOpenFriendDetailView(int? friendId)
         {
-            if (FriendDetailViewModel != null && FriendDetailViewModel.HasChanges)
+            if (DetailViewModel != null && DetailViewModel.HasChanges)
             {
                 var result = _messageDialogService.ShowOkCancelDialog("You have made changes. Navigate Away?", "Question");
                 if (result == MessageDialogResult.Cancel)
@@ -61,8 +61,8 @@ namespace FriendOrganizer.UI.ViewModel
                     return;
                 }
             }
-            FriendDetailViewModel = _friendDetailViewModelCreator();
-            await FriendDetailViewModel.LoadAsync(friendId);
+            DetailViewModel = _friendDetailViewModelCreator();
+            await DetailViewModel.LoadAsync(friendId);
         }
 
         private void OnCreateNewFriendExecute()
@@ -72,7 +72,7 @@ namespace FriendOrganizer.UI.ViewModel
 
         private void AfterFriendDeleted(int friendId)
         {
-            FriendDetailViewModel = null;
+            DetailViewModel = null;
         }
     }
 }
