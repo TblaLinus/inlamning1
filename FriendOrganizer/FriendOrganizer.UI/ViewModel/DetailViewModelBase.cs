@@ -80,7 +80,12 @@ namespace FriendOrganizer.UI.ViewModel
 
         protected virtual void OnCloseDetailViewExecute()
         {
-            //TODO: Implement
+            EventAggregator.GetEvent<AfterDetailClosedEvent>()
+                .Publish(new AfterDetailClosedEventArgs
+                {
+                    Id = this.Id,
+                    ViewModelName = this.GetType().Name
+                });
         }
     }
 }
