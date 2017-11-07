@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FriendOrganizer.UI.View"
+             xmlns:model="clr-namespace:FriendOrganizer.Model;assembly=FriendOrganizer.Model"
              xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -27,7 +28,7 @@
         <Label Grid.Row="4" Content="End" Margin="10 0"/>
         <toolkit:DateTimePicker Grid.Row="5" Value="{Binding Meeting.DateTo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <Grid>
+        <Grid Grid.Row="6">
             <Grid.Resources>
                 <DataTemplate DataType="{x:Type model:Friend}">
                     <TextBlock>

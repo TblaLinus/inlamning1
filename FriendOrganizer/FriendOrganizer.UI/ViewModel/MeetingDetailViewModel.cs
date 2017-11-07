@@ -8,6 +8,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FriendOrganizer.UI.ViewModel
 {
@@ -16,10 +18,9 @@ namespace FriendOrganizer.UI.ViewModel
         private IMeetingRepository _meetingRepository;
         private MeetingWrapper _meeting;
         private IMessageDialogService _messageDialogService;
-
-
         private Friend _selectedAvailableFriend;
         private Friend _selectedAddedFriend;
+        private List<Friend> _allFriends;
 
         public MeetingDetailViewModel(IEventAggregator eventAggregator,
             IMessageDialogService messageDialogService,
@@ -83,6 +84,9 @@ namespace FriendOrganizer.UI.ViewModel
             InitializeMeeting(meeting);
 
             //TODO: Load friends for picklist
+            _allFriends = await _meetingRepository.GetAllFriendsAsync();
+
+            SetupPicklist();
         }
 
         protected override void OnDeleteExecute()
@@ -106,6 +110,24 @@ namespace FriendOrganizer.UI.ViewModel
             await _meetingRepository.SaveAsync();
             HasChanges = _meetingRepository.HasChanges();
             RaiseDetailSavedEvent(Meeting.Id, Meeting.Title);
+        }
+
+        private void SetupPicklist()
+        {
+            var meetingFriendIds = Meeting.Model.Friends.Select(f => f.Id).ToList();
+            var addedFriends = _allFriends.Where(f => meetingFriendIds.Contains(f.Id)).OrderBy(f => f.FirstName);
+            var availableFriends = _allFriends.Except(addedFriends).OrderBy(f => f.FirstName);
+
+            AddedFriends.Clear();
+            AvailableFriends.Clear();
+            foreach(var addedFriend in addedFriends)
+            {
+                AddedFriends.Add(addedFriend);
+            }
+            foreach (var availableFriend in availableFriends)
+            {
+                AvailableFriends.Add(availableFriend);
+            }
         }
 
         private Meeting CreateNewMeeting()
