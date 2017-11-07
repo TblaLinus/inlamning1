@@ -30,7 +30,7 @@ namespace FriendOrganizer.UI.ViewModel
 
             foreach(var wrapper in ProgrammingLanguages)
             {
-                wrapper.ProprtyChanged -= Wrapper_PropertyChanged;
+                wrapper.PropertyChanged -= Wrapper_PropertyChanged;
             }
 
             ProgrammingLanguages.Clear();
