@@ -91,7 +91,11 @@ namespace FriendOrganizer.UI.ViewModel
                     ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
                 }
             };
-                ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+            if (Meeting.Id == 0)
+            {
+                Meeting.Title = ""; //Trigger validation
+            }
         }
     }
 }
