@@ -26,7 +26,7 @@ namespace FriendOrganizer.UI.ViewModel
             CloseDetailViewCommand = new DelegateCommand(OnCloseDetailViewExecute);
         }
 
-        public abstract Task LoadAsync(int? Id);
+        public abstract Task LoadAsync(int Id);
 
         public ICommand SaveCommand { get; private set; }
 
