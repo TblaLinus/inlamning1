@@ -119,8 +119,15 @@ namespace FriendOrganizer.UI.ViewModel
             wrapper.Name = ""; //trigger validation
         }
 
-        private void OnRemoveExecute()
+        private async void OnRemoveExecute()
         {
+            var isreferenced = await _programmingLanguageRepository.IsReferencedByFriendAsync(SelectedProgrammingLanguage.Id);
+            if (isreferenced)
+            {
+                MessageDialogService.ShowInfoDialog($"{SelectedProgrammingLanguage.Name} can't be removed as it is referenced by a friend");
+                return;
+            }
+
             SelectedProgrammingLanguage.PropertyChanged -= Wrapper_PropertyChanged;
             _programmingLanguageRepository.Remove(SelectedProgrammingLanguage.Model);
             ProgrammingLanguages.Remove(SelectedProgrammingLanguage);
