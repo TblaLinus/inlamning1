@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -161,7 +162,27 @@ namespace FriendOrganizer.UI.ViewModel
 
         protected override async void OnSaveExecute()
         {
+            try
+            {
             await _friendRepository.SaveAsync();
+            }
+            catch(DbUpdateConcurrencyException ex)
+            {
+                var result = MessageDialogService.ShowOkCancelDialog("The entity has been changed by another user"
+                    + "Click OK to save anyway, click Cancel to reload the entity from the database", "Question");
+
+                if (result == MessageDialogResult.OK)
+                {
+                    var entry = ex.Entries.Single();
+                    entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+                    await _friendRepository.SaveAsync();
+                }
+                else
+                {
+                    await ex.Entries.Single().ReloadAsync();
+                    await LoadAsync(Friend.Id);
+                }
+            }
             HasChanges = _friendRepository.HasChanges();
             Id = Friend.Id;
             RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
