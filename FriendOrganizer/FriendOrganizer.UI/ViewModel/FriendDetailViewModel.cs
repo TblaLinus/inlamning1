@@ -168,6 +168,14 @@ namespace FriendOrganizer.UI.ViewModel
             }
             catch(DbUpdateConcurrencyException ex)
             {
+                var databaseValues = ex.Entries.Single().GetDatabaseValues();
+                if (databaseValues == null)
+                {
+                    MessageDialogService.ShowInfoDialog("The entity has been deleted by another user");
+                    RaiseDetailDeletedEvent(Id);
+                    return;
+                }
+
                 var result = MessageDialogService.ShowOkCancelDialog("The entity has been changed by another user"
                     + "Click OK to save anyway, click Cancel to reload the entity from the database", "Question");
 
