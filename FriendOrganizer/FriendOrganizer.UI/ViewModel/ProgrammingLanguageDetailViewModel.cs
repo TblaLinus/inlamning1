@@ -104,7 +104,7 @@ namespace FriendOrganizer.UI.ViewModel
                 {
                     ex = ex.InnerException;
                 }
-                MessageDialogService.ShowInfoDialog("Error while saving, " + "the data will be reloaded. Details:" + ex.Message);
+                await MessageDialogService.ShowInfoDialogAsync("Error while saving, " + "the data will be reloaded. Details:" + ex.Message);
                 await LoadAsync(Id);
             }
         }
@@ -124,7 +124,7 @@ namespace FriendOrganizer.UI.ViewModel
             var isreferenced = await _programmingLanguageRepository.IsReferencedByFriendAsync(SelectedProgrammingLanguage.Id);
             if (isreferenced)
             {
-                MessageDialogService.ShowInfoDialog($"{SelectedProgrammingLanguage.Name} can't be removed as it is referenced by a friend");
+                await MessageDialogService.ShowInfoDialogAsync($"{SelectedProgrammingLanguage.Name} can't be removed as it is referenced by a friend");
                 return;
             }
 
